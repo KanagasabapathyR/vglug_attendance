@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "443630381180",
+    "project_id": "vglug-attendance",
+    "storage_bucket": "vglug-attendance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443630381180:android:4e4e6c224513ac410141f9",
+        "android_client_info": {
+          "package_name": "com.example.vglug_attendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443630381180-epf4qfg305b4rvbh4hc8jgc0r8fsp9ge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIudrQkwAyCf638a7TirwIr3Tk4WIWfXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443630381180-epf4qfg305b4rvbh4hc8jgc0r8fsp9ge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
