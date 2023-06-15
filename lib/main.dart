@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vglug_attendance/controller/binder.dart';
 import 'package:vglug_attendance/controller/home_controller.dart';
-import 'package:vglug_attendance/home.dart';
+import 'package:vglug_attendance/admin.dart';
+import 'package:vglug_attendance/view/splash.dart';
 
 import 'firebase_options.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialBinding: Binder(),
-      home: const MyHomePage(title:''),
+      home: Splash(),
     );
   }
 }

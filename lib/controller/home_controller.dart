@@ -4,6 +4,7 @@ import 'package:vglug_attendance/view/home_page.dart';
 
 class HomeController extends GetxController {
   int currentIndex = 0;
+  RxString? selectedYear='2023'.obs;
 
   var currentScreen;
   var currenAppBarText;
@@ -27,7 +28,7 @@ class HomeController extends GetxController {
 
   final _appBarText=[
     "Home",
-    "CLasses"
+    "Classes"
 
   ];
 

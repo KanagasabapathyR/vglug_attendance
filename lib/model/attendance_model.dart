@@ -10,19 +10,40 @@ class AttendanceModel {
   final String? staffName;
   final Timestamp? timestamp;
   final List? attendance;
+  final Timestamp? lastUpdated;
+  final int? present;
+  final int? absent;
+  final int? total;
+
+
 
   AttendanceModel(
       {this.staffName,
-        this.timestamp,this.attendance
+        this.timestamp,
+        this.attendance,
+        this.lastUpdated,
+        this.absent,
+        this.present,
+        this.total
       });
   AttendanceModel.fromSnapshot(snapshot)
       : staffName = snapshot?.data()['staff_name'],
       timestamp=snapshot?.data()['timestamp'],
-        attendance=snapshot?.data()['attendance'];
+        attendance=snapshot?.data()['attendance'],
+        lastUpdated=snapshot?.data()['last_update'],
+        absent=snapshot?.data()['absent'],
+        present=snapshot?.data()['present'],
+        total=snapshot?.data()['present'] + snapshot.data()['absent']
+  ;
+
+
   Map<String, dynamic> toJson() => {
   "staff_name": staffName,
   'timestamp':timestamp,
-    'attendance':attendance
+    'attendance':attendance,
+    'last_update':lastUpdated,
+    'absent':absent,
+    'present':present
 };
 }
 
