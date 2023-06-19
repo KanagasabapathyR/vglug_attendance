@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:vglug_attendance/view/classes.dart';
-import 'package:vglug_attendance/view/home_page.dart';
+import 'package:vglug_attendance/view/admin/classes.dart';
+import 'package:vglug_attendance/view/admin/home_page.dart';
 
-class HomeController extends GetxController {
+class AdminHomeController extends GetxController {
   int currentIndex = 0;
   RxString? selectedYear='2023'.obs;
 
@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   }
 
   final _screens = [
-    Home(),
+    AdminHome(),
     Classes(),
   ];
 

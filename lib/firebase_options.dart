@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBu7YFa1RPLcblw9JZUqENiOH48BFhHjFw',
+    appId: '1:443630381180:web:71c9af65901cecdd0141f9',
+    messagingSenderId: '443630381180',
+    projectId: 'vglug-attendance',
+    authDomain: 'vglug-attendance.firebaseapp.com',
+    storageBucket: 'vglug-attendance.appspot.com',
+    measurementId: 'G-D53E4HKGBY',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDIudrQkwAyCf638a7TirwIr3Tk4WIWfXM',
     appId: '1:443630381180:android:4e4e6c224513ac410141f9',
@@ -63,7 +67,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '443630381180',
     projectId: 'vglug-attendance',
     storageBucket: 'vglug-attendance.appspot.com',
+    androidClientId: '443630381180-1slr6ge483uk0hg37gmqup44t8plitfd.apps.googleusercontent.com',
     iosClientId: '443630381180-djhau9nc8jqguagat2v27kvuko10ak9t.apps.googleusercontent.com',
     iosBundleId: 'com.example.vglugAttendance',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyB2gl0fgp8Xa6E4uHj0oh68pw0RyeUMxTs',
+    appId: '1:443630381180:ios:b601bdbcdf7e97eb0141f9',
+    messagingSenderId: '443630381180',
+    projectId: 'vglug-attendance',
+    storageBucket: 'vglug-attendance.appspot.com',
+    androidClientId: '443630381180-1slr6ge483uk0hg37gmqup44t8plitfd.apps.googleusercontent.com',
+    iosClientId: '443630381180-ciq2oc3d1li8s7puvnhrejve6q24tt45.apps.googleusercontent.com',
+    iosBundleId: 'com.example.vglugAttendance.RunnerTests',
   );
 }

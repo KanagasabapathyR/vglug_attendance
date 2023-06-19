@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vglug_attendance/view/attendance_page.dart';
-import 'package:vglug_attendance/view/charts.dart';
-import 'package:vglug_attendance/view/students_page.dart';
+import 'package:vglug_attendance/view/admin/attendance_page.dart';
+import 'package:vglug_attendance/view/admin/charts.dart';
+import 'package:vglug_attendance/view/admin/student/students_page.dart';
 
 class SingleClass extends StatelessWidget {
   SingleClass({this.classId, this.className});

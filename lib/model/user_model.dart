@@ -11,6 +11,7 @@ class UserModel {
   final List? classes;
   final String? phoneNumber;
   final String? userType;
+  final String? userId;
 
 
 
@@ -20,13 +21,15 @@ class UserModel {
         this.classes,
         this.phoneNumber,
         this.userType,
+        this.userId,
 
       });
 
   UserModel.fromSnapshot(snapshot)
-      : userName = snapshot.data()?['role'],
+      : userName = snapshot.data()?['user_name'],
         classes=snapshot.data()?['class'],
-  userType=snapshot.data()?['user_type'],
+        userType=snapshot.data()?['user_type'],
+        userId=snapshot.data()?['user_id'],
         phoneNumber=snapshot.data()?['phone_number'];
 // Map<String, dynamic> toJson() => {
 //
@@ -46,7 +49,6 @@ class ClassList extends GetxController{
       {this.classId,
         this.year,
         this.className,
-
       });
   factory ClassList.fromJson(Map<String, dynamic> json) => ClassList(
 

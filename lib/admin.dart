@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vglug_attendance/controller/attendance_controller.dart';
 import 'package:vglug_attendance/controller/auth_controller.dart';
-import 'package:vglug_attendance/controller/home_controller.dart';
+import 'package:vglug_attendance/controller/admin_home_controller.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.find();
+    AdminHomeController homeController = Get.find();
     homeController.setCurrentScreen();
     AuthController authController = Get.find();
     AttendanceController attendanceController=Get.find();
-    return GetBuilder<HomeController>(builder: (controller) {
+    return GetBuilder<AdminHomeController>(builder: (controller) {
       return Scaffold(
         drawer: Drawer(
           child: Column(

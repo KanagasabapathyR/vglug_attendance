@@ -33,7 +33,7 @@ class _NewAddState extends State<NewAdd> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getStudentsFuture.value=attendanceController.getStudents(widget.classId,'2023');
+    getStudentsFuture.value=attendanceController.getClassStudents(widget.classId,'2023');
   }
 
   @override

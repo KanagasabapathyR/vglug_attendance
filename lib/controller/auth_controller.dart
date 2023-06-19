@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vglug_attendance/controller/common_controller.dart';
 import 'package:vglug_attendance/admin.dart';
 import 'package:vglug_attendance/model/user_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
-import 'package:vglug_attendance/view/home_page.dart';
-import 'package:vglug_attendance/view/login.dart';
-import 'package:vglug_attendance/view/otpverify.dart';
-import 'package:vglug_attendance/view/student.dart';
-import 'package:vglug_attendance/view/student_detail.dart';
+import 'package:vglug_attendance/view/admin/home_page.dart';
+import 'package:vglug_attendance/view/admin/login.dart';
+import 'package:vglug_attendance/view/admin/otpverify.dart';
+import 'package:vglug_attendance/student.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,14 +40,24 @@ class AuthController extends GetxController {
 
 
 
-      print(user.userName);
-      if(user.userName=="admin") {  
+      print(user.userType);
+      if(user.userType=="admin") {
         Get.offAll(() => Admin());
-      } else if(user.userName=='student') {
+      } else if(user.userType=='student') {
         Get.offAll(()=>Student());
-      }else if(user.userName==null){
+      }else if(user.userType==null){
         // Get.offAll(()=>StudentDetail(phoneNumber: FirebaseAuth.instance.currentUser?.phoneNumber,));
-
+        showDialog(context: Get.context!, builder: (context) {
+          return AlertDialog(
+           title: Text("User not found.  Please contact Admin"),
+            actions: [
+              TextButton(child: Text('Ok'), onPressed: (){
+                _auth.signOut();
+                Get.offAll(Login());
+              },),
+            ],
+          );
+        },);
         print('user not found');
     }
     } else {
@@ -127,6 +137,19 @@ class AuthController extends GetxController {
           Get.offAll(()=>Student());
         }else if(user.userType==null){
           // Get.offAll(()=>StudentDetail(phoneNumber: user?.phoneNumber,));
+          showDialog(context: Get.context!, builder: (context) {
+            return AlertDialog(
+              title: Text("User not found.  Please contact Admin"),
+              actions: [
+                TextButton(child: Text('Ok'), onPressed: (){
+                  _auth.signOut();
+                  // Get.back();
+                  Get.offAll(Login());
+
+                },),
+              ],
+            );
+          },);
           print('user is not found');
         }
 

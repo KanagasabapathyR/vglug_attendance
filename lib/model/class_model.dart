@@ -16,8 +16,8 @@ class ClassModel {
   });
 
   ClassModel.fromSnapshot(snapshot)
-      : className = snapshot.data()['class_name'],
-        classId = snapshot.data()['class_id'];
+      : className = snapshot.data()?['class_name'],
+        classId = snapshot.data()?['class_id'];
 
   Map<String, dynamic> toJson() => {
         "class_name": className,

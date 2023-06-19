@@ -2,17 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:vglug_attendance/controller/home_controller.dart';
+import 'package:vglug_attendance/controller/admin_home_controller.dart';
 import 'package:vglug_attendance/model/attendance_model.dart';
+import 'package:vglug_attendance/model/user_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
 
 class AttendanceController extends GetxController {
   Rxn<Future?> getAttendanceFuture = Rxn();
-  Rxn<Future?> getClass=Rxn();
-
+  Rxn<Future?> getClass = Rxn();
 
   //Firebase-methods
-  updateAttendance({String? classId, atList, attendance,year}) async {
+  updateAttendance({String? classId, atList, attendance, year}) async {
     commonController.setLoadValue(true);
     var list = [];
     int? present = 0;
@@ -32,9 +32,7 @@ class AttendanceController extends GetxController {
       }
     }
     await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
+        .collection('classes')
         .doc(classId)
         .collection('attendance')
         .doc(DateFormat('dd-MMM-yyy').format(attendance!.timestamp!.toDate()))
@@ -49,12 +47,14 @@ class AttendanceController extends GetxController {
     });
 
     getAttendanceFuture.value = getAttendance(
-        classId: classId, selectedDate: attendance!.timestamp!.toDate(),year: '2023');
+        classId: classId,
+        selectedDate: attendance!.timestamp!.toDate(),
+        year: '2023');
 
     commonController.setLoadValue(false);
   }
 
-  addAttendance({classId, attendanceList, staffName, date,year}) async {
+  addAttendance({classId, attendanceList, staffName, date, year}) async {
     commonController.setLoadValue(true);
 
     var list = [];
@@ -76,89 +76,139 @@ class AttendanceController extends GetxController {
       }
     }
     await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
+        .collection('classes')
         .doc(classId)
         .collection('attendance')
-        .doc(DateFormat('dd-MMM-yyy').format(date))..set({
-      'staff_name': staffName,
-      'timestamp': Timestamp.fromDate(date),
-      'last_update': Timestamp.now(),
-      'attendance': list,
-      'present': present,
-      'absent': absent,
-    }).whenComplete(() {
-      commonController.showToast(message: "Attendance added");
-    });
-
-
-
-
+        .doc(DateFormat('dd-MMM-yyy').format(date))
+      ..set({
+        'staff_name': staffName,
+        'timestamp': Timestamp.fromDate(date),
+        'last_update': Timestamp.now(),
+        'attendance': list,
+        'present': present,
+        'absent': absent,
+      }).whenComplete(() {
+        commonController.showToast(message: "Attendance added");
+      });
 
     commonController.setLoadValue(false);
   }
 
-  Future<QuerySnapshot> getStudents(classId,year) async {
+  Future<QuerySnapshot> getClassStudents(classId, year) async {
     return await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
+        .collection('classes')
         .doc(classId)
         .collection('students')
         .get();
   }
-  Future<DocumentSnapshot> getSingleStudent({classId, year, phoneNumber}) async {
-    print(classId);
-    print(year);
-    print(phoneNumber);
-    return await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
-        .doc(classId)
-        .collection('students').doc(phoneNumber)
-        .get();
+
+  addStudents({students, classId}) async {
+    commonController.setLoadValue(true);
+    for (var student in students!) {
+      await FirebaseFirestore.instance
+          .collection('classes')
+          .doc(classId)
+          .collection('students')
+          .doc(student.userId)
+          .set({
+        'student_id': student.userId,
+        'student_name': student.userName,
+      });
+    }
+
   }
 
-  addRole({phoneNumber,role, classId, year})async{
-    commonController.setLoadValue(true);
-    await FirebaseFirestore.instance.collection('roles').doc(phoneNumber).set({
-      'role':role,
-      'phone_number':phoneNumber,
-      'class_id':classId,
-      'year':year,
-    }).whenComplete(() => commonController.setLoadValue(false));
+  updateUser({classId, selectedStudents}) async {
+    for (UserModel stu in selectedStudents) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(stu.userId)
+          .get()
+          .then((data) async {
+        UserModel user = UserModel.fromSnapshot(data);
+
+        print(user.classes?.length);
+
+        List userClasses = user.classes ?? [];
+
+        if (!userClasses.contains(classId)) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(stu.userId)
+              .update({
+            'class': [classId, ...userClasses]
+          });
+        }
+
+        commonController.setLoadValue(false);
+        commonController.showToast(message: 'Students Added');
+
+
+      });
+    }
   }
+
+  // Future<DocumentSnapshot> getSingleStudent({classId, year, phoneNumber}) async {
+  //   print(classId);
+  //   print(year);
+  //   print(phoneNumber);
+  //   return await FirebaseFirestore.instance
+  //
+  //       .collection('classes')
+  //       .doc(classId)
+  //       .collection('students').doc(phoneNumber)
+  //       .get();
+  // }
+
+  // addRole({phoneNumber,role, classId, year})async{
+  //   commonController.setLoadValue(true);
+  //   await FirebaseFirestore.instance.collection('roles').doc(phoneNumber).set({
+  //     'role':role,
+  //     'phone_number':phoneNumber,
+  //     'class_id':classId,
+  //     'year':year,
+  //   }).whenComplete(() => commonController.setLoadValue(false));
+  // }
 
   getAttendance({classId, selectedDate, year}) async {
     print(selectedDate);
     print(classId);
     return await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
+        .collection('classes')
         .doc(classId)
         .collection('attendance')
         .doc(DateFormat('dd-MMM-yyy').format(selectedDate).toString())
         .get();
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getAllAttendance({classId,year }) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllAttendance(
+      {classId, year}) async {
     return await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(year)
+        .collection('classes')
         .doc(classId)
         .collection('attendance')
         .get();
   }
 
-  getClasses({selectedYear})async{
+  getClasses({selectedYear}) async {
     return await FirebaseFirestore.instance
-        .collection('vglug')
-        .doc('classes')
-        .collection(selectedYear)
+        .collection('classes')
+        .where('year', isEqualTo: selectedYear)
+        .get();
+  }
+
+  Future<DocumentSnapshot>? getUser({id}) {
+    return FirebaseFirestore.instance.collection("users").doc(id).get();
+  }
+
+  Future<QuerySnapshot> getAllUsers() async {
+    return await FirebaseFirestore.instance.collection('users').get();
+  }
+
+  Future<QuerySnapshot> getAllStudents() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .where('user_type', isEqualTo: 'student')
         .get();
   }
 

@@ -11,8 +11,8 @@ import 'package:vglug_attendance/controller/common_controller.dart';
 import 'package:vglug_attendance/model/attendance_model.dart';
 import 'package:vglug_attendance/model/student_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
-import 'package:vglug_attendance/view/already_added.dart';
-import 'package:vglug_attendance/view/new_add.dart';
+import 'package:vglug_attendance/view/admin/already_added.dart';
+import 'package:vglug_attendance/view/admin/new_add.dart';
 
 class Attendance extends StatefulWidget {
   Attendance({this.classId});
