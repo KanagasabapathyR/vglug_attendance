@@ -29,7 +29,7 @@ class OtpVerify extends StatelessWidget {
               key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
                     child: Text(

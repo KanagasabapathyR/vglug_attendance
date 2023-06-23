@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +8,8 @@ import 'package:vglug_attendance/controller/admin_home_controller.dart';
 import 'package:vglug_attendance/model/attendance_model.dart';
 import 'package:vglug_attendance/model/user_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
-
+import 'package:csv/csv.dart';
+import 'package:flutter/services.dart' show rootBundle;
 class AttendanceController extends GetxController {
   Rxn<Future?> getAttendanceFuture = Rxn();
   Rxn<Future?> getClass = Rxn();
@@ -105,6 +108,7 @@ class AttendanceController extends GetxController {
   addStudents({students, classId}) async {
     commonController.setLoadValue(true);
     for (var student in students!) {
+      print('add stu');
       await FirebaseFirestore.instance
           .collection('classes')
           .doc(classId)
@@ -115,22 +119,15 @@ class AttendanceController extends GetxController {
         'student_name': student.userName,
       });
     }
-
-  }
-
-  updateUser({classId, selectedStudents}) async {
-    for (UserModel stu in selectedStudents) {
+    for (UserModel stu in students) {
+      print('update user');
       await FirebaseFirestore.instance
           .collection('users')
           .doc(stu.userId)
           .get()
           .then((data) async {
         UserModel user = UserModel.fromSnapshot(data);
-
-        print(user.classes?.length);
-
         List userClasses = user.classes ?? [];
-
         if (!userClasses.contains(classId)) {
           await FirebaseFirestore.instance
               .collection('users')
@@ -140,13 +137,89 @@ class AttendanceController extends GetxController {
           });
         }
 
-        commonController.setLoadValue(false);
-        commonController.showToast(message: 'Students Added');
 
 
       });
     }
+    commonController.setLoadValue(false);
+    commonController.showToast(message: 'Students Added');
+    Get.back();
+
+
   }
+
+
+  Future<void> addDataFromCSVToFirestore() async {
+
+    final csvData=await rootBundle.loadString('assets/cybersecurity1.csv');
+
+    // String csvData = await File('assets/cybersecurity.csv').readAsString();
+    List<List<dynamic>> csvTable =  CsvToListConverter().convert(csvData);
+
+    List<List<dynamic>> data=[];
+
+    data=csvTable;
+
+    print(data.length);
+
+    for(int i=0;i<data.length;i++) {
+
+      // print(data[i]);
+
+
+
+     var user= UserModel(
+          userName: csvTable[i][1],
+          college: csvTable[i][2],
+          courseCurrentYear: csvTable[i][3],
+          collegeCourse: csvTable[i][4],
+          collegeCourseBranch: csvTable[i][5],
+          phoneNumber: "+91${csvTable[i][6]}",
+
+          userId: "+91${csvTable[i][6]}",
+          userType: 'student'
+      ).toJson();
+
+      await FirebaseFirestore.instance.collection('users').doc("+91${csvTable[i][6]}").set(user);
+
+      print(user);
+
+    }
+  }
+
+
+
+  // updateUser({classId, selectedStudents}) async {
+  //
+  //   for (UserModel stu in selectedStudents) {
+  //     print('update user');
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(stu.userId)
+  //         .get()
+  //         .then((data) async {
+  //       UserModel user = UserModel.fromSnapshot(data);
+  //
+  //       // print(user.classes?.length);
+  //
+  //       List userClasses = user.classes ?? [];
+  //
+  //       if (!userClasses.contains(classId)) {
+  //         await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(stu.userId)
+  //             .update({
+  //           'class': [classId, ...userClasses]
+  //         });
+  //       }
+  //
+  //       commonController.setLoadValue(false);
+  //       commonController.showToast(message: 'Students Added');
+  //
+  //
+  //     });
+  //   }
+  // }
 
   // Future<DocumentSnapshot> getSingleStudent({classId, year, phoneNumber}) async {
   //   print(classId);
@@ -186,7 +259,7 @@ class AttendanceController extends GetxController {
     return await FirebaseFirestore.instance
         .collection('classes')
         .doc(classId)
-        .collection('attendance')
+        .collection('attendance').orderBy('timestamp')
         .get();
   }
 
@@ -195,6 +268,11 @@ class AttendanceController extends GetxController {
         .collection('classes')
         .where('year', isEqualTo: selectedYear)
         .get();
+  }
+
+  getClasss(classId)async{
+    return await FirebaseFirestore.instance
+        .collection('classes').doc(classId).get();
   }
 
   Future<DocumentSnapshot>? getUser({id}) {

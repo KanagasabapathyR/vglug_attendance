@@ -61,6 +61,7 @@ class _ChartsState extends State<Charts> {
                List<AttendanceModel>? attendance = snapshot.data?.docs.map((doc) => AttendanceModel.fromSnapshot(doc)).toList();
                for(AttendanceModel atten in attendance!){
                  chartData.add(atten.present!.toDouble());
+
                }
               }
 

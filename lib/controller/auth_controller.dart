@@ -8,8 +8,8 @@ import 'package:vglug_attendance/admin.dart';
 import 'package:vglug_attendance/model/user_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
 import 'package:vglug_attendance/view/admin/home_page.dart';
-import 'package:vglug_attendance/view/admin/login.dart';
-import 'package:vglug_attendance/view/admin/otpverify.dart';
+import 'package:vglug_attendance/view/auth/login.dart';
+import 'package:vglug_attendance/view/auth/otpverify.dart';
 import 'package:vglug_attendance/student.dart';
 
 class AuthController extends GetxController {

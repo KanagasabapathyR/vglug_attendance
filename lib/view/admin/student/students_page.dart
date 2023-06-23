@@ -54,7 +54,7 @@ class Students extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                                Get.to(()=>StudentProfile(students![index]));
+                                Get.to(()=>StudentProfile(classId: classId,student: students![index]));
                       },
                       child: Card(
                         child: ListTile(

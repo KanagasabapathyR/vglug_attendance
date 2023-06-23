@@ -35,12 +35,12 @@ class AddStudent extends StatelessWidget {
         body: GetBuilder<CommonController>(
             builder: (controller) {
           return controller.isLoading
-              ? kLoading
+              ? Center(child: kLoading)
               : FutureBuilder<QuerySnapshot>(
                   future: attendanceController.getAllStudents(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return kLoading;
+                      return Center(child: kLoading);
                     } else if (snapshot.hasData) {
                       students = snapshot.data?.docs
                           .map((doc) => UserModel.fromSnapshot(doc))
@@ -109,9 +109,9 @@ class AddStudent extends StatelessWidget {
               await attendanceController.addStudents(
                   students: commonController.selectedStudents,
                   classId: classId);
-              await attendanceController.updateUser(
-                  selectedStudents: commonController.selectedStudents,
-                  classId: classId);
+              // await attendanceController.updateUser(
+              //     selectedStudents: commonController.selectedStudents,
+              //     classId: classId);
             } else {
               commonController.showToast(message: "Select atleast 1 student");
             }

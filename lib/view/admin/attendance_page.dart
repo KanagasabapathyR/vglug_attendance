@@ -9,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:vglug_attendance/controller/attendance_controller.dart';
 import 'package:vglug_attendance/controller/common_controller.dart';
 import 'package:vglug_attendance/model/attendance_model.dart';
+import 'package:vglug_attendance/model/class_model.dart';
 import 'package:vglug_attendance/model/student_model.dart';
 import 'package:vglug_attendance/utils/constants.dart';
 import 'package:vglug_attendance/view/admin/already_added.dart';
@@ -29,9 +30,9 @@ class _AttendanceState extends State<Attendance> {
 
   List<AttendanceList>? atList;
 
-  DateTime startDate = DateTime(2023, 1, 1);
-
-  DateTime endDate = DateTime(2023, 12, 31);
+  // DateTime startDate = DateTime(2023, 1, 1);
+  //
+  // DateTime endDate = DateTime(2023, 12, 31);
 
   List<DateTime> sundays = [];
 
@@ -43,7 +44,7 @@ class _AttendanceState extends State<Attendance> {
 
   RxInt focusedDayIndex = 0.obs;
 
-  RxInt selectedDayIndex = 0.obs;
+  RxInt? selectedDayIndex=0.obs;
 
   CalendarFormat format = CalendarFormat.week;
   AttendanceController attendanceController = Get.find();
@@ -52,7 +53,6 @@ class _AttendanceState extends State<Attendance> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    sundays = attendanceController.getSundays(startDate, endDate);
     isInit.value = false;
 
   }
@@ -74,94 +74,132 @@ class _AttendanceState extends State<Attendance> {
         // height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-            Container(
-              height: 50,
-              child: ListView.builder(
-                controller: scrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: sundays.length,
-                itemBuilder: (context, index) {
-                  print(sundays.length);
-                  var singleSunday = sundays[index];
+            FutureBuilder(
+              future: attendanceController.getClasss(widget.classId),
+              builder: (context, snapshot) {
 
-                  DateTime lastSunday = attendanceController.getNearestSunday(
-                      DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day)
-                      //  DateTime(2023,6,5)
-                      );
+                if(snapshot.connectionState==ConnectionState.waiting){
+                  return LinearProgressIndicator();
+                }
 
-                  focusedDayIndex.value = sundays.indexOf(DateTime(
-                      lastSunday.year, lastSunday.month, lastSunday.day));
-                  print(focusedDayIndex.value);
-                  print(sundays[focusedDayIndex.value]);
+                else if(snapshot.hasData){
 
-                  print(lastSunday.toString());
+                  ClassModel classs=ClassModel.fromSnapshot(snapshot.data);
+
+                  DateTime? start=classs.startDate?.toDate();
+                  DateTime? end=classs.endDate?.toDate();
+
+                  sundays = attendanceController.getSundays(DateTime(start!.year,start.month,start.day), DateTime(end!.year,end.month,end.day));
+                  // sundays = attendanceController.getSundays(start!,end!);
+
+                  print(sundays[0]);
 
 
-                  if (needScroll.value) {
-                    selectedDate?.value = sundays[focusedDayIndex.value];
+                  return Container(
+                    height: 50,
+                    child: ListView.builder(
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: sundays.length,
+                      itemBuilder: (context, index) {
+                        print(sundays.length);
+                        var singleSunday = sundays[index];
 
-                    scrollController.animateTo(focusedDayIndex.value * (70),
-                        duration: Duration(seconds: 1),
-                        curve: Curves.easeInOutCubicEmphasized);
-                    needScroll.value = false;
-                  }
-
-                  Future.delayed(Duration(seconds: 1),() {
-                    attendanceController.getAttendanceFuture.value =
-                        attendanceController.getAttendance(
-                            classId: widget.classId,
-                            selectedDate: selectedDate?.value,
-                        year: '2023',
+                        DateTime lastSunday = attendanceController.getNearestSunday(
+                            DateTime(DateTime.now().year, DateTime.now().month,
+                                DateTime.now().day)
+                          //  DateTime(2023,6,5)
                         );
 
-                  },);
+                        focusedDayIndex.value = sundays.indexOf(DateTime(
+                            lastSunday.year, lastSunday.month, lastSunday.day));
+                        selectedDayIndex?.value=focusedDayIndex.value;
+                        // print(selectedDayIndex?.value);
+                        // print(focusedDayIndex.value);
+                        // print(sundays[focusedDayIndex.value]);
+                        //
+                        // print(lastSunday.toString());
 
 
-                  return GestureDetector(
-                    onTap: () {
-                      selectedDate?.value = singleSunday;
-                      attendanceController.getAttendanceFuture.value =
-                          attendanceController.getAttendance(
-                              classId: widget.classId,
-                              selectedDate: selectedDate?.value,
-                          year: '2023'
-                          );
+                        if (needScroll.value) {
+                          selectedDate?.value = sundays[focusedDayIndex.value];
 
-                      selectedDayIndex.value = sundays.indexOf(DateTime(
-                        selectedDate!.value.year,
-                        selectedDate!.value.month,
-                        selectedDate!.value.day,
-                      ));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Obx(
-                        () => Container(
-                          width: 70,
-                          decoration: BoxDecoration(
-                              color: focusedDayIndex.value == index
-                                  ? Colors.black12
-                                  : selectedDayIndex.value == index
-                                      ? Colors.yellow
-                                      : null,
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(10)),
+                          scrollController.animateTo(focusedDayIndex.value * (70),
+                              duration: Duration(seconds: 1),
+                              curve: Curves.ease);
+
+                          Future.delayed(Duration(seconds: 1),() {
+                            attendanceController.getAttendanceFuture.value =
+                                attendanceController.getAttendance(
+                                  classId: widget.classId,
+                                  selectedDate: selectedDate?.value,
+                                  year: '2023',
+                                );
+                          },);
+                          needScroll.value = false;
+                        }
+                        return GestureDetector(
+                          onTap: () {
+                            selectedDate?.value = singleSunday;
+                            attendanceController.getAttendanceFuture.value =
+                                attendanceController.getAttendance(
+                                    classId: widget.classId,
+                                    selectedDate: selectedDate?.value,
+                                    year: '2023'
+                                );
+
+                            selectedDayIndex?.value = sundays.indexOf(DateTime(
+                              selectedDate!.value.year,
+                              selectedDate!.value.month,
+                              selectedDate!.value.day,
+                            ));
+                            print(DateTime(
+                              selectedDate!.value.year,
+                              selectedDate!.value.month,
+                              selectedDate!.value.day,
+                            ));
+                            print( sundays.indexOf(DateTime(
+                              selectedDate!.value.year,
+                              selectedDate!.value.month,
+                              selectedDate!.value.day,
+                            )));
+                            print(selectedDayIndex?.value);
+
+                          },
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              DateFormat('dd MMM')
-                                  .format(singleSunday)
-                                  .toString(),
-                              textAlign: TextAlign.center,
+                            padding: const EdgeInsets.all(4.0),
+                            child: Obx(
+                                  () => Container(
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    color: focusedDayIndex.value == index
+                                        ? Colors.black12
+                                        : selectedDayIndex?.value == index
+                                        ? Colors.yellow
+                                        : null,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    DateFormat('dd MMM')
+                                        .format(singleSunday)
+                                        .toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   );
-                },
-              ),
+                }
+
+                return Container();
+
+              }
             ),
             Obx(
               () {

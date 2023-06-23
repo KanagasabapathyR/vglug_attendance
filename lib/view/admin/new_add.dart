@@ -56,7 +56,7 @@ class _NewAddState extends State<NewAdd> {
                         checkin: RxString('10:30 AM'),
                         checkout: RxString('10:30 AM'),
                         isPresent: false.obs,
-                        studentId: ''));
+                        studentId: studentList[i].studentId));
                   }
                     isInit.value=false;
                 }
@@ -73,7 +73,8 @@ class _NewAddState extends State<NewAdd> {
                        Expanded(child: Center(child: Text("No Students"))),
 
                       if(studentAtList!.isNotEmpty) 
-                        Expanded(
+                        Container(
+                          height: 500,
                           child: Column(
                           children: [
                             SizedBox(
@@ -100,303 +101,299 @@ class _NewAddState extends State<NewAdd> {
                             SizedBox(
                               height: 10,
                             ),
-                            Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: studentList?.length,
-                                  itemBuilder: (context, index) {
+                            Expanded(
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24.0),
+                                  child: ListView.builder(
+                                    // physics: NeverScrollableScrollPhysics(),
+                                    // shrinkWrap: true,
+                                    itemCount: studentList?.length,
+                                    itemBuilder: (context, index) {
 
 
-                                    if(index==0){
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Expanded(child: Text("Students Name",style: TextStyle(
-                                                  fontSize: 16, fontWeight: FontWeight.w600),)),
-                                              Expanded(child: Center(child: Text("Attendance",style: TextStyle(
-                                                  fontSize: 16, fontWeight: FontWeight.w600),))),
-
-                                            ],
-                                          ),
-                                          Row(
+                                      if(index==0){
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               children: [
-                                                Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(left:20.0),
+                                                Expanded(child: Text("Students Name",style: TextStyle(
+                                                    fontSize: 16, fontWeight: FontWeight.w600),)),
+                                                Expanded(child: Center(child: Text("Attendance",style: TextStyle(
+                                                    fontSize: 16, fontWeight: FontWeight.w600),))),
+
+                                              ],
+                                            ),
+                                            Row(
+                                                children: [
+                                                  Expanded(
                                                       child: Text(
 
                                                         studentList?[index].name ?? '',
                                                         textAlign: TextAlign.left,
-                                                      ),
-                                                    )),
-                                                Expanded(
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Center(
-                                                        child: Obx(
-                                                                () => Checkbox(
-                                                                value: studentAtList?[index]
-                                                                    .isPresent
-                                                                    ?.value,
-                                                                onChanged: (value) {
-                                                                  // isPresent.value=value!;
-                                                                  studentAtList?[index]
+                                                      )),
+                                                  Expanded(
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Center(
+                                                          child: Obx(
+                                                                  () => Checkbox(
+                                                                  value: studentAtList?[index]
                                                                       .isPresent
-                                                                      ?.value = value!;
-                                                                  print(studentAtList?[index]
-                                                                      .isPresent
-                                                                      ?.value);
-                                                                })
+                                                                      ?.value,
+                                                                  onChanged: (value) {
+                                                                    // isPresent.value=value!;
+                                                                    studentAtList?[index]
+                                                                        .isPresent
+                                                                        ?.value = value!;
+                                                                    print(studentAtList?[index]
+                                                                        .isPresent
+                                                                        ?.value);
+                                                                  })
+                                                          ),
                                                         ),
-                                                      ),
-                                                      // Obx(
-                                                      //   () {
-                                                      //     Rx<TimeOfDay> checkin = Rx(
-                                                      //         attendanceController
-                                                      //             .getTimeOfDayFromString(
-                                                      //                 studentAtList[index]
-                                                      //                     .checkin!
-                                                      //                     .value));
-                                                      //     return GestureDetector(
-                                                      //       onTap: () async {
-                                                      //         var time = await showTimePicker(
-                                                      //             context: context,
-                                                      //             initialTime: TimeOfDay(
-                                                      //                 hour:
-                                                      //                     checkin.value.hour,
-                                                      //                 minute: checkin
-                                                      //                     .value.minute));
-                                                      //         if (time != null) {
-                                                      //           studentAtList[index]
-                                                      //                   .checkin
-                                                      //                   ?.value =
-                                                      //               time!.format(context);
-                                                      //           print(studentAtList[index]
-                                                      //               .checkin
-                                                      //               ?.value);
-                                                      //           print('success');
-                                                      //         }
-                                                      //         print(time?.format(context));
-                                                      //       },
-                                                      //       child: Container(
-                                                      //         height: 35,
-                                                      //         // width: 63,
-                                                      //         padding: EdgeInsets.all(8.0),
-                                                      //         color: Colors.grey[300],
-                                                      //         child: Text(
-                                                      //           "${checkin.value.hour} : ${checkin.value.minute}",
-                                                      //           textAlign: TextAlign.right,
-                                                      //           style: TextStyle(
-                                                      //               fontWeight:
-                                                      //                   FontWeight.bold),
-                                                      //         ),
-                                                      //       ),
-                                                      //     );
-                                                      //   },
-                                                      // ),
-                                                      // SizedBox(
-                                                      //   width: 10,
-                                                      // ),
-                                                      // //checkout
-                                                      // Obx(
-                                                      //   () {
-                                                      //     Rx<TimeOfDay> checkout = Rx(
-                                                      //         attendanceController
-                                                      //             .getTimeOfDayFromString(
-                                                      //                 studentAtList[index]
-                                                      //                     .checkout!
-                                                      //                     .value));
-                                                      //     return GestureDetector(
-                                                      //       onTap: () async {
-                                                      //         var time = await showTimePicker(
-                                                      //             context: context,
-                                                      //             initialTime: TimeOfDay(
-                                                      //                 hour:
-                                                      //                     checkout.value.hour,
-                                                      //                 minute: checkout
-                                                      //                     .value.minute));
-                                                      //
-                                                      //         if (time != null) {
-                                                      //           studentAtList[index]
-                                                      //                   .checkout
-                                                      //                   ?.value =
-                                                      //               time!.format(context);
-                                                      //           print(studentAtList[index]
-                                                      //               .checkout
-                                                      //               ?.value);
-                                                      //           print('success');
-                                                      //         }
-                                                      //         print(time?.format(context));
-                                                      //       },
-                                                      //       child: Container(
-                                                      //         height: 35,
-                                                      //         // width: 63,
-                                                      //         padding: EdgeInsets.all(8.0),
-                                                      //         color: Colors.grey[300],
-                                                      //         child: Obx(() {
-                                                      //           return Text(
-                                                      //             "${checkout.value.hour} : ${checkout.value.minute}",
-                                                      //             textAlign: TextAlign.right,
-                                                      //             style: TextStyle(
-                                                      //                 fontWeight:
-                                                      //                     FontWeight.bold),
-                                                      //           );
-                                                      //         }),
-                                                      //       ),
-                                                      //     );
-                                                      //   },
-                                                      // ),
-                                                    ],
+                                                        // Obx(
+                                                        //   () {
+                                                        //     Rx<TimeOfDay> checkin = Rx(
+                                                        //         attendanceController
+                                                        //             .getTimeOfDayFromString(
+                                                        //                 studentAtList[index]
+                                                        //                     .checkin!
+                                                        //                     .value));
+                                                        //     return GestureDetector(
+                                                        //       onTap: () async {
+                                                        //         var time = await showTimePicker(
+                                                        //             context: context,
+                                                        //             initialTime: TimeOfDay(
+                                                        //                 hour:
+                                                        //                     checkin.value.hour,
+                                                        //                 minute: checkin
+                                                        //                     .value.minute));
+                                                        //         if (time != null) {
+                                                        //           studentAtList[index]
+                                                        //                   .checkin
+                                                        //                   ?.value =
+                                                        //               time!.format(context);
+                                                        //           print(studentAtList[index]
+                                                        //               .checkin
+                                                        //               ?.value);
+                                                        //           print('success');
+                                                        //         }
+                                                        //         print(time?.format(context));
+                                                        //       },
+                                                        //       child: Container(
+                                                        //         height: 35,
+                                                        //         // width: 63,
+                                                        //         padding: EdgeInsets.all(8.0),
+                                                        //         color: Colors.grey[300],
+                                                        //         child: Text(
+                                                        //           "${checkin.value.hour} : ${checkin.value.minute}",
+                                                        //           textAlign: TextAlign.right,
+                                                        //           style: TextStyle(
+                                                        //               fontWeight:
+                                                        //                   FontWeight.bold),
+                                                        //         ),
+                                                        //       ),
+                                                        //     );
+                                                        //   },
+                                                        // ),
+                                                        // SizedBox(
+                                                        //   width: 10,
+                                                        // ),
+                                                        // //checkout
+                                                        // Obx(
+                                                        //   () {
+                                                        //     Rx<TimeOfDay> checkout = Rx(
+                                                        //         attendanceController
+                                                        //             .getTimeOfDayFromString(
+                                                        //                 studentAtList[index]
+                                                        //                     .checkout!
+                                                        //                     .value));
+                                                        //     return GestureDetector(
+                                                        //       onTap: () async {
+                                                        //         var time = await showTimePicker(
+                                                        //             context: context,
+                                                        //             initialTime: TimeOfDay(
+                                                        //                 hour:
+                                                        //                     checkout.value.hour,
+                                                        //                 minute: checkout
+                                                        //                     .value.minute));
+                                                        //
+                                                        //         if (time != null) {
+                                                        //           studentAtList[index]
+                                                        //                   .checkout
+                                                        //                   ?.value =
+                                                        //               time!.format(context);
+                                                        //           print(studentAtList[index]
+                                                        //               .checkout
+                                                        //               ?.value);
+                                                        //           print('success');
+                                                        //         }
+                                                        //         print(time?.format(context));
+                                                        //       },
+                                                        //       child: Container(
+                                                        //         height: 35,
+                                                        //         // width: 63,
+                                                        //         padding: EdgeInsets.all(8.0),
+                                                        //         color: Colors.grey[300],
+                                                        //         child: Obx(() {
+                                                        //           return Text(
+                                                        //             "${checkout.value.hour} : ${checkout.value.minute}",
+                                                        //             textAlign: TextAlign.right,
+                                                        //             style: TextStyle(
+                                                        //                 fontWeight:
+                                                        //                     FontWeight.bold),
+                                                        //           );
+                                                        //         }),
+                                                        //       ),
+                                                        //     );
+                                                        //   },
+                                                        // ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ])
-                                        ],
-                                      );
-                                    }
+                                                ])
+                                          ],
+                                        );
+                                      }
 
 
-                                    return Row(
-                                        children: [
-                                          Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left:20.0),
+                                      return Row(
+                                          children: [
+                                            Expanded(
                                                 child: Text(
-                                                    studentList?[index].name ?? ''),
-                                              )),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                    studentList?[index].name ?? '')),
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
 
-                                              children: [
-                                                Center(
-                                                  child: Obx(
-                                                        () => Checkbox(
-                                                        value: studentAtList?[index]
-                                                            .isPresent
-                                                            ?.value,
-                                                        onChanged: (value) {
-                                                          // isPresent.value=value!;
-                                                          studentAtList?[index]
+                                                children: [
+                                                  Center(
+                                                    child: Obx(
+                                                          () => Checkbox(
+                                                          value: studentAtList?[index]
                                                               .isPresent
-                                                              ?.value = value!;
-                                                          print(studentAtList?[index]
-                                                              .isPresent
-                                                              ?.value);
-                                                        }),
+                                                              ?.value,
+                                                          onChanged: (value) {
+                                                            // isPresent.value=value!;
+                                                            studentAtList?[index]
+                                                                .isPresent
+                                                                ?.value = value!;
+                                                            print(studentAtList?[index]
+                                                                .isPresent
+                                                                ?.value);
+                                                          }),
+                                                    ),
                                                   ),
-                                                ),
-                                                // Obx(
-                                                //   () {
-                                                //     Rx<TimeOfDay> checkin = Rx(
-                                                //         attendanceController
-                                                //             .getTimeOfDayFromString(
-                                                //                 studentAtList[index]
-                                                //                     .checkin!
-                                                //                     .value));
-                                                //     return GestureDetector(
-                                                //       onTap: () async {
-                                                //         var time = await showTimePicker(
-                                                //             context: context,
-                                                //             initialTime: TimeOfDay(
-                                                //                 hour:
-                                                //                     checkin.value.hour,
-                                                //                 minute: checkin
-                                                //                     .value.minute));
-                                                //         if (time != null) {
-                                                //           studentAtList[index]
-                                                //                   .checkin
-                                                //                   ?.value =
-                                                //               time!.format(context);
-                                                //           print(studentAtList[index]
-                                                //               .checkin
-                                                //               ?.value);
-                                                //           print('success');
-                                                //         }
-                                                //         print(time?.format(context));
-                                                //       },
-                                                //       child: Container(
-                                                //         height: 35,
-                                                //         // width: 63,
-                                                //         padding: EdgeInsets.all(8.0),
-                                                //         color: Colors.grey[300],
-                                                //         child: Text(
-                                                //           "${checkin.value.hour} : ${checkin.value.minute}",
-                                                //           textAlign: TextAlign.right,
-                                                //           style: TextStyle(
-                                                //               fontWeight:
-                                                //                   FontWeight.bold),
-                                                //         ),
-                                                //       ),
-                                                //     );
-                                                //   },
-                                                // ),
-                                                // SizedBox(
-                                                //   width: 10,
-                                                // ),
-                                                // //checkout
-                                                // Obx(
-                                                //   () {
-                                                //     Rx<TimeOfDay> checkout = Rx(
-                                                //         attendanceController
-                                                //             .getTimeOfDayFromString(
-                                                //                 studentAtList[index]
-                                                //                     .checkout!
-                                                //                     .value));
-                                                //     return GestureDetector(
-                                                //       onTap: () async {
-                                                //         var time = await showTimePicker(
-                                                //             context: context,
-                                                //             initialTime: TimeOfDay(
-                                                //                 hour:
-                                                //                     checkout.value.hour,
-                                                //                 minute: checkout
-                                                //                     .value.minute));
-                                                //
-                                                //         if (time != null) {
-                                                //           studentAtList[index]
-                                                //                   .checkout
-                                                //                   ?.value =
-                                                //               time!.format(context);
-                                                //           print(studentAtList[index]
-                                                //               .checkout
-                                                //               ?.value);
-                                                //           print('success');
-                                                //         }
-                                                //         print(time?.format(context));
-                                                //       },
-                                                //       child: Container(
-                                                //         height: 35,
-                                                //         // width: 63,
-                                                //         padding: EdgeInsets.all(8.0),
-                                                //         color: Colors.grey[300],
-                                                //         child: Obx(() {
-                                                //           return Text(
-                                                //             "${checkout.value.hour} : ${checkout.value.minute}",
-                                                //             textAlign: TextAlign.right,
-                                                //             style: TextStyle(
-                                                //                 fontWeight:
-                                                //                     FontWeight.bold),
-                                                //           );
-                                                //         }),
-                                                //       ),
-                                                //     );
-                                                //   },
-                                                // ),
-                                              ],
+                                                  // Obx(
+                                                  //   () {
+                                                  //     Rx<TimeOfDay> checkin = Rx(
+                                                  //         attendanceController
+                                                  //             .getTimeOfDayFromString(
+                                                  //                 studentAtList[index]
+                                                  //                     .checkin!
+                                                  //                     .value));
+                                                  //     return GestureDetector(
+                                                  //       onTap: () async {
+                                                  //         var time = await showTimePicker(
+                                                  //             context: context,
+                                                  //             initialTime: TimeOfDay(
+                                                  //                 hour:
+                                                  //                     checkin.value.hour,
+                                                  //                 minute: checkin
+                                                  //                     .value.minute));
+                                                  //         if (time != null) {
+                                                  //           studentAtList[index]
+                                                  //                   .checkin
+                                                  //                   ?.value =
+                                                  //               time!.format(context);
+                                                  //           print(studentAtList[index]
+                                                  //               .checkin
+                                                  //               ?.value);
+                                                  //           print('success');
+                                                  //         }
+                                                  //         print(time?.format(context));
+                                                  //       },
+                                                  //       child: Container(
+                                                  //         height: 35,
+                                                  //         // width: 63,
+                                                  //         padding: EdgeInsets.all(8.0),
+                                                  //         color: Colors.grey[300],
+                                                  //         child: Text(
+                                                  //           "${checkin.value.hour} : ${checkin.value.minute}",
+                                                  //           textAlign: TextAlign.right,
+                                                  //           style: TextStyle(
+                                                  //               fontWeight:
+                                                  //                   FontWeight.bold),
+                                                  //         ),
+                                                  //       ),
+                                                  //     );
+                                                  //   },
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   width: 10,
+                                                  // ),
+                                                  // //checkout
+                                                  // Obx(
+                                                  //   () {
+                                                  //     Rx<TimeOfDay> checkout = Rx(
+                                                  //         attendanceController
+                                                  //             .getTimeOfDayFromString(
+                                                  //                 studentAtList[index]
+                                                  //                     .checkout!
+                                                  //                     .value));
+                                                  //     return GestureDetector(
+                                                  //       onTap: () async {
+                                                  //         var time = await showTimePicker(
+                                                  //             context: context,
+                                                  //             initialTime: TimeOfDay(
+                                                  //                 hour:
+                                                  //                     checkout.value.hour,
+                                                  //                 minute: checkout
+                                                  //                     .value.minute));
+                                                  //
+                                                  //         if (time != null) {
+                                                  //           studentAtList[index]
+                                                  //                   .checkout
+                                                  //                   ?.value =
+                                                  //               time!.format(context);
+                                                  //           print(studentAtList[index]
+                                                  //               .checkout
+                                                  //               ?.value);
+                                                  //           print('success');
+                                                  //         }
+                                                  //         print(time?.format(context));
+                                                  //       },
+                                                  //       child: Container(
+                                                  //         height: 35,
+                                                  //         // width: 63,
+                                                  //         padding: EdgeInsets.all(8.0),
+                                                  //         color: Colors.grey[300],
+                                                  //         child: Obx(() {
+                                                  //           return Text(
+                                                  //             "${checkout.value.hour} : ${checkout.value.minute}",
+                                                  //             textAlign: TextAlign.right,
+                                                  //             style: TextStyle(
+                                                  //                 fontWeight:
+                                                  //                     FontWeight.bold),
+                                                  //           );
+                                                  //         }),
+                                                  //       ),
+                                                  //     );
+                                                  //   },
+                                                  // ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ]);
-                                  },
+                                          ]);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
-                            Spacer(),
+                             // Spacer(),
                              ElevatedButton(
                                 onPressed: () {
                                   print(studentAtList?.length);

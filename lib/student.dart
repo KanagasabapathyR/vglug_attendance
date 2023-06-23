@@ -31,6 +31,7 @@ class Student extends StatelessWidget {
                 title: Text('Home'),
                 onTap: () {
                   controller.changeScreen(0);
+                  attendanceController.addDataFromCSVToFirestore();
                   Get.back();
                 },
               ),

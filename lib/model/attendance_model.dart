@@ -53,9 +53,10 @@ class AttendanceList extends GetxController{
    RxBool? isPresent;
    String? name;
    String? studentId;
+   Timestamp? date;
   AttendanceList(
       {this.checkin,
-        this.checkout,this.isPresent,this.name,this.studentId,
+        this.checkout,this.isPresent,this.name,this.studentId,this.date,
       });
   factory AttendanceList.fromJson(Map<String, dynamic> json) => AttendanceList(
     name: json['name'],
@@ -63,6 +64,7 @@ class AttendanceList extends GetxController{
     checkout: RxString(json['checkout']),
     isPresent: RxBool(json['is_present']??false),
     studentId: json['student_id'],
+    date:json["data"],
   );
 
   Map<String, dynamic> toJson() => {
