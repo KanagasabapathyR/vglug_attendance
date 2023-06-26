@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vglug_attendance/controller/attendance_controller.dart';
 import 'package:vglug_attendance/controller/auth_controller.dart';
 import 'package:vglug_attendance/controller/admin_home_controller.dart';
 import 'package:vglug_attendance/controller/student_home_controller.dart';
+import 'package:vglug_attendance/view/admin/user_profile.dart';
 
 class Student extends StatelessWidget {
   const Student({super.key});
@@ -31,15 +33,17 @@ class Student extends StatelessWidget {
                 title: Text('Home'),
                 onTap: () {
                   controller.changeScreen(0);
-                  attendanceController.addDataFromCSVToFirestore();
+                  // attendanceController.addDataFromCSVToFirestore();
                   Get.back();
                 },
               ),
               ListTile(
-                title: Text('Classes'),
-                onTap: () {
-                  controller.changeScreen(1);
-                  Get.back();
+                title: Text('Profile'),
+                onTap: () async{
+                  Get.to(()=>UserProfile(FirebaseAuth.instance.currentUser?.phoneNumber))?.then((value) => {
+                  Get.back()
+                  });
+                  // controller.changeScreen(1);
                 },
               ),
               ListTile(

@@ -23,6 +23,8 @@ class AddStudent extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+
+          title: Text("Add Student"),
           actions: [
             IconButton(
                 onPressed: () {

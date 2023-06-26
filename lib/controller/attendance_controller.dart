@@ -150,24 +150,14 @@ class AttendanceController extends GetxController {
 
 
   Future<void> addDataFromCSVToFirestore() async {
-
     final csvData=await rootBundle.loadString('assets/cybersecurity1.csv');
-
     // String csvData = await File('assets/cybersecurity.csv').readAsString();
     List<List<dynamic>> csvTable =  CsvToListConverter().convert(csvData);
-
     List<List<dynamic>> data=[];
-
     data=csvTable;
-
     print(data.length);
-
     for(int i=0;i<data.length;i++) {
-
       // print(data[i]);
-
-
-
      var user= UserModel(
           userName: csvTable[i][1],
           college: csvTable[i][2],

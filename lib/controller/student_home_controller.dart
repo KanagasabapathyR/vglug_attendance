@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:vglug_attendance/view/admin/classes.dart';
 import 'package:vglug_attendance/view/admin/home_page.dart';
+import 'package:vglug_attendance/view/admin/user_profile.dart';
 import 'package:vglug_attendance/view/student/home_page.dart';
 
 class StudentHomeController extends GetxController {
@@ -23,12 +25,12 @@ class StudentHomeController extends GetxController {
 
   final _screens = [
     StudentHome(),
-    // Classes(),
+    // UserProfile(FirebaseAuth.instance.currentUser?.phoneNumber)
   ];
 
   final _appBarText=[
     "Home",
-    // "Classes"
+    // "Profile"
 
   ];
 

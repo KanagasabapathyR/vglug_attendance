@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:vglug_attendance/controller/attendance_controller.dart';
 import 'package:vglug_attendance/controller/auth_controller.dart';
 import 'package:vglug_attendance/controller/admin_home_controller.dart';
+import 'package:vglug_attendance/utils/constants.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -47,8 +48,13 @@ class Admin extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text("Are you sure you want to Sing Out"),
+
+
+                        if(commonController.isLoading){
+                          return kLoading;
+                        } else {
+                          return AlertDialog(
+                          title: Text("Are you sure you want to Sign Out"),
                           actions: [
                             TextButton(
                                 onPressed: () {
@@ -62,6 +68,7 @@ class Admin extends StatelessWidget {
                                 child: Text("Yes"))
                           ],
                         );
+                        }
                       });
                 },
               )
